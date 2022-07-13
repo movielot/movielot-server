@@ -10,7 +10,6 @@ class MovielotApplicationTests {
 
 	@Test
 	void contextLoads() {
-		assertThat(true).isFalse();
 	}
 
 }
