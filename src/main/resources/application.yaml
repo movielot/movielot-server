@@ -1,0 +1,5 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://${MONGODB_ID}:${MONGODB_PASSWORD}@${MONGODB_NODES}/?ssl=true&replicaSet=atlas-xp7uvh-shard-0&authSource=admin&retryWrites=true&w=majority
+      database: ${MONGODB_DATABASE}
