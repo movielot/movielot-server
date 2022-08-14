@@ -21,7 +21,7 @@ public class TMDBMovie {
     private long id;
     private String originalLanguage;
     private String originalTitle;
-    private String overView;
+    private String overview;
     private Double popularity;
     private String posterPath;
     private String releaseDate;
