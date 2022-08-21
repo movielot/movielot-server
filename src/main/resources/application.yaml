@@ -1,0 +1,40 @@
+spring:
+  profiles:
+    group:
+      "local": "local, common"
+      "prod": "prod, common"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: common
+  data:
+    mongodb:
+      uri: mongodb://${MONGODB_ID}:${MONGODB_PASSWORD}@${MONGODB_NODES}/?ssl=true&replicaSet=atlas-xp7uvh-shard-0&authSource=admin&retryWrites=true&w=majority
+      database: ${MONGODB_DATABASE}
+
+client:
+  tmdb:
+    host: https://api.themoviedb.org/3
+    apiKey: ${TMDB_AUTH_KEY}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+client:
+  front:
+    host: http://localhost:3000
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+client:
+  front:
+    host: https://movielot.com # TBD
