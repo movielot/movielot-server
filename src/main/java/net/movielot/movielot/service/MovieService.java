@@ -11,6 +11,7 @@ import net.movielot.movielot.response.tmdb.TMDBMovieVideosResponse;
 import net.movielot.movielot.response.tmdb.TMDBProvidersResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,19 +31,25 @@ public class MovieService {
     public MovieDetailsResponse getDetails(String id) {
         MovieDetailsResponse result = new MovieDetailsResponse();
 
-        TMDBMovieDetailsResponse details = tmdbClient.getDetails(id);
-        TMDBProvidersResponse providers = tmdbClient.getProviders(id);
-        TMDBMovieVideosResponse videos = tmdbClient.getVideos(id);
+        Mono<TMDBMovieDetailsResponse> details = tmdbClient.getDetails(id);
+        Mono<TMDBProvidersResponse> providers = tmdbClient.getProviders(id);
+        Mono<TMDBMovieVideosResponse> videos = tmdbClient.getVideos(id);
 
-        BeanUtils.copyProperties(details, result);
+        details.subscribe(response -> {
+            BeanUtils.copyProperties(response, result);
 
-        List<MovieDetailsResponse.Genre> collect = details.getGenres().stream()
-                .map(genre -> new MovieDetailsResponse.Genre(genre.getId(), genre.getName()))
-                .collect(Collectors.toList());
-        result.setGenres(collect);
+            List<MovieDetailsResponse.Genre> collect = response.getGenres().stream()
+                    .map(genre -> new MovieDetailsResponse.Genre(genre.getId(), genre.getName()))
+                    .collect(Collectors.toList());
+            result.setGenres(collect);
+        });
 
-        result.setProviders(providers);
-        result.setVideos(videos);
+        providers.subscribe(result::setProviders);
+        videos.subscribe(result::setVideos);
+
+        details.block();
+        providers.block();
+        videos.block();
 
         return result;
     }

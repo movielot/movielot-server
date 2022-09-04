@@ -12,8 +12,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Mono;
+
+import java.net.URI;
 
 @Component
 @Slf4j
@@ -24,6 +28,9 @@ public class TMDBClient {
     @Value("${client.tmdb.host}")
     private String host;
     private final RestTemplate restTemplate = new RestTemplate();
+    private final WebClient webClient = WebClient.builder()
+            .baseUrl(host)
+            .build();
 
     public TMDBMovieListResponse getLatestMovies(int page) {
         HttpEntity<Void> httpEntity = new HttpEntity<>(getHttpHeaders());
@@ -36,33 +43,39 @@ public class TMDBClient {
             .getBody();
     }
 
-    public TMDBProvidersResponse getProviders(String id) {
-        HttpEntity<Void> httpEntity = new HttpEntity<>(getHttpHeaders());
-        UriComponents uriComponents = UriComponentsBuilder.fromUriString(host + "/movie/" + id + "/watch/providers")
-            .build();
-        return restTemplate
-            .exchange(uriComponents.toString(), HttpMethod.GET, httpEntity, TMDBProvidersResponse.class)
-            .getBody();
+    public Mono<TMDBProvidersResponse> getProviders(String id) {
+        URI uri = UriComponentsBuilder.fromUriString(host + "/movie/{id}/watch/providers")
+            .build(id);
+
+        return webClient.get()
+                .uri(uri)
+                .headers(this::getHeaders)
+                .retrieve()
+                .bodyToMono(TMDBProvidersResponse.class);
     }
 
-    public TMDBMovieDetailsResponse getDetails(String id) {
-        HttpEntity<Void> httpEntity = new HttpEntity<>(getHttpHeaders());
-        UriComponents uriComponents = UriComponentsBuilder.fromUriString(host + "/movie/" + id)
+    public Mono<TMDBMovieDetailsResponse> getDetails(String id) {
+        URI uri = UriComponentsBuilder.fromUriString(host + "/movie/{id}")
                 .queryParam("language", "ko")
-                .build();
-        return restTemplate
-                .exchange(uriComponents.toString(), HttpMethod.GET, httpEntity, TMDBMovieDetailsResponse.class)
-                .getBody();
+                .build(id);
+
+        return webClient.get()
+                .uri(uri)
+                .headers(this::getHeaders)
+                .retrieve()
+                .bodyToMono(TMDBMovieDetailsResponse.class);
     }
 
-    public TMDBMovieVideosResponse getVideos(String id) {
-        HttpEntity<Void> httpEntity = new HttpEntity<>(getHttpHeaders());
-        UriComponents uriComponents = UriComponentsBuilder.fromUriString(host + "/movie/" + id + "/videos")
+    public Mono<TMDBMovieVideosResponse> getVideos(String id) {
+        URI uri = UriComponentsBuilder.fromUriString(host + "/movie/{id}/videos")
                 .queryParam("language", "ko")
-                .build();
-        return restTemplate
-                .exchange(uriComponents.toString(), HttpMethod.GET, httpEntity, TMDBMovieVideosResponse.class)
-                .getBody();
+                .build(id);
+
+        return webClient.get()
+                .uri(uri)
+                .headers(this::getHeaders)
+                .retrieve()
+                .bodyToMono(TMDBMovieVideosResponse.class);
     }
 
     private HttpHeaders getHttpHeaders() {
@@ -70,5 +83,10 @@ public class TMDBClient {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + apiKey);
         return headers;
+    }
+
+    private void getHeaders(HttpHeaders httpHeaders) {
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setBearerAuth(apiKey);
     }
 }
