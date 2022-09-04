@@ -18,9 +18,6 @@ client:
   tmdb:
     host: https://api.themoviedb.org/3
     apiKey: ${TMDB_AUTH_KEY}
-  imdb:
-    host: https://imdb-api.com
-    apiKey: ${IMDB_AUTH_KEY}
 
 ---
 spring:

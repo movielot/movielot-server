@@ -11,16 +11,6 @@
       "description": "TMDB API key"
     },
     {
-      "name": "client.imdb.host",
-      "type": "java.lang.String",
-      "description": "IMDB API 도메인"
-    },
-    {
-      "name": "client.imdb.apiKey",
-      "type": "java.lang.String",
-      "description": "IMDB API key"
-    },
-    {
       "name": "client.front.host",
       "type": "java.lang.String",
       "description": "FrontEnd 도메인 정보"

@@ -2,11 +2,9 @@ package net.movielot.movielot.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.movielot.movielot.configuration.IMDBClient;
 import net.movielot.movielot.configuration.TMDBClient;
 import net.movielot.movielot.infrastructure.MovieRepository;
 import net.movielot.movielot.response.MovieDetailsResponse;
-import net.movielot.movielot.response.imdb.IMDBRatingResponse;
 import net.movielot.movielot.response.tmdb.TMDBMovieDetailsResponse;
 import net.movielot.movielot.response.tmdb.TMDBMovieListResponse;
 import net.movielot.movielot.response.tmdb.TMDBMovieVideosResponse;
@@ -24,7 +22,6 @@ public class MovieService {
 
     private final MovieRepository movieRepository;
     private final TMDBClient tmdbClient;
-    private final IMDBClient imdbClient;
 
     public TMDBMovieListResponse getNowPlayMovies(int page) {
         return tmdbClient.getLatestMovies(page);
@@ -36,7 +33,6 @@ public class MovieService {
         TMDBMovieDetailsResponse details = tmdbClient.getDetails(id);
         TMDBProvidersResponse providers = tmdbClient.getProviders(id);
         TMDBMovieVideosResponse videos = tmdbClient.getVideos(id);
-        IMDBRatingResponse rating = imdbClient.getRating(details.getImdbId());
 
         BeanUtils.copyProperties(details, result);
 
@@ -47,7 +43,6 @@ public class MovieService {
 
         result.setProviders(providers);
         result.setVideos(videos);
-        result.setRating(rating);
 
         return result;
     }

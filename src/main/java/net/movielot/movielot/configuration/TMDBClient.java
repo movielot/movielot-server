@@ -1,11 +1,10 @@
 package net.movielot.movielot.configuration;
 
 import lombok.extern.slf4j.Slf4j;
-import net.movielot.movielot.response.imdb.IMDBRatingResponse;
 import net.movielot.movielot.response.tmdb.TMDBMovieDetailsResponse;
+import net.movielot.movielot.response.tmdb.TMDBMovieListResponse;
 import net.movielot.movielot.response.tmdb.TMDBMovieVideosResponse;
 import net.movielot.movielot.response.tmdb.TMDBProvidersResponse;
-import net.movielot.movielot.response.tmdb.TMDBMovieListResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

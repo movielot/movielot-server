@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.movielot.movielot.response.imdb.IMDBRatingResponse;
 import net.movielot.movielot.response.tmdb.TMDBMovieVideosResponse;
 import net.movielot.movielot.response.tmdb.TMDBProvidersResponse;
 
@@ -35,7 +34,6 @@ public class MovieDetailsResponse {
 
     TMDBMovieVideosResponse videos;
     TMDBProvidersResponse providers;
-    IMDBRatingResponse rating;
 
     @Data
     @AllArgsConstructor
