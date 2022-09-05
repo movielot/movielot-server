@@ -21,6 +21,8 @@ public class TMDBMovieVideosResponse {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Video {
         private String name;
         private String key;

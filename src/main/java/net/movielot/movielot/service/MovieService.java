@@ -13,9 +13,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -37,15 +34,18 @@ public class MovieService {
 
         details.subscribe(response -> {
             BeanUtils.copyProperties(response, result);
-
-            List<MovieDetailsResponse.Genre> collect = response.getGenres().stream()
-                    .map(genre -> new MovieDetailsResponse.Genre(genre.getId(), genre.getName()))
-                    .collect(Collectors.toList());
-            result.setGenres(collect);
         });
 
-        providers.subscribe(result::setProviders);
-        videos.subscribe(result::setVideos);
+        providers.subscribe(response -> {
+            MovieDetailsResponse.TMDBProvider tmdbProvider = new MovieDetailsResponse.TMDBProvider();
+            BeanUtils.copyProperties(response, tmdbProvider);
+            result.setProviders(tmdbProvider);
+        });
+        videos.subscribe(response -> {
+            MovieDetailsResponse.TMDBVideo tmdbVideo = new MovieDetailsResponse.TMDBVideo();
+            BeanUtils.copyProperties(response, tmdbVideo);
+            result.setVideos(tmdbVideo);
+        });
 
         details.block();
         providers.block();

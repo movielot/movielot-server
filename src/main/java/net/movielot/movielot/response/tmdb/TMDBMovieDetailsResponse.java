@@ -34,6 +34,8 @@ public class TMDBMovieDetailsResponse {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Genre {
         private int id;
         private String name;

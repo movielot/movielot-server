@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
-@JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class TMDBProvidersResponse {
     private int id;
@@ -22,6 +22,8 @@ public class TMDBProvidersResponse {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Provider {
         private int displayPriority;
         private String logoPath;
@@ -32,6 +34,8 @@ public class TMDBProvidersResponse {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Country {
         private String link;
         private List<Provider> buy;
@@ -42,6 +46,8 @@ public class TMDBProvidersResponse {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Countries {
         @JsonProperty("KR")
         private Country KR;
