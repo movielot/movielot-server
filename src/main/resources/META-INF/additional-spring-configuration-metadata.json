@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "client.tmdb.host",
+      "type": "java.lang.String",
+      "description": "TMDB API 도메인"
+    },
+    {
+      "name": "client.tmdb.apiKey",
+      "type": "java.lang.String",
+      "description": "TMDB API key"
+    },
+    {
+      "name": "client.front.host",
+      "type": "java.lang.String",
+      "description": "FrontEnd 도메인 정보"
+    }
+  ]
+}

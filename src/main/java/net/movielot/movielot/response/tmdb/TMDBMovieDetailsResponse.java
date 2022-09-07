@@ -3,21 +3,21 @@ package net.movielot.movielot.response.tmdb;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
-@JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class TMDBMovie {
-
+public class TMDBMovieDetailsResponse {
     private boolean adult;
     private String backdropPath;
-    private List<Long> genreIds;
+    private List<Genre> genres;
     private long id;
     private String originalLanguage;
     private String originalTitle;
@@ -29,5 +29,15 @@ public class TMDBMovie {
     private boolean video;
     private Double voteAverage;
     private int voteCount;
+    private String imdbId;
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public static class Genre {
+        private int id;
+        private String name;
+    }
 }
