@@ -3,6 +3,7 @@ package net.movielot.movielot.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.movielot.movielot.configuration.TMDBClient;
+import net.movielot.movielot.exceptions.NoSuchElementFoundException;
 import net.movielot.movielot.infrastructure.MovieRepository;
 import net.movielot.movielot.response.MovieDetailsResponse;
 import net.movielot.movielot.response.tmdb.TMDBMovieDetailsResponse;
@@ -11,6 +12,7 @@ import net.movielot.movielot.response.tmdb.TMDBMovieVideosResponse;
 import net.movielot.movielot.response.tmdb.TMDBProvidersResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -32,9 +34,7 @@ public class MovieService {
         Mono<TMDBProvidersResponse> providers = tmdbClient.getProviders(id);
         Mono<TMDBMovieVideosResponse> videos = tmdbClient.getVideos(id);
 
-        details.subscribe(response -> {
-            BeanUtils.copyProperties(response, result);
-        });
+        details.subscribe(response -> BeanUtils.copyProperties(response, result));
 
         providers.subscribe(response -> {
             MovieDetailsResponse.TMDBProvider tmdbProvider = new MovieDetailsResponse.TMDBProvider();

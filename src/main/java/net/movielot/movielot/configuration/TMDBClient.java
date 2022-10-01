@@ -1,18 +1,17 @@
 package net.movielot.movielot.configuration;
 
 import lombok.extern.slf4j.Slf4j;
+import net.movielot.movielot.exceptions.NoSuchElementFoundException;
 import net.movielot.movielot.response.tmdb.TMDBMovieDetailsResponse;
 import net.movielot.movielot.response.tmdb.TMDBMovieListResponse;
 import net.movielot.movielot.response.tmdb.TMDBMovieVideosResponse;
 import net.movielot.movielot.response.tmdb.TMDBProvidersResponse;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
@@ -50,8 +49,14 @@ public class TMDBClient {
         return webClient.get()
                 .uri(uri)
                 .headers(this::getHeaders)
-                .retrieve()
-                .bodyToMono(TMDBProvidersResponse.class);
+                .exchangeToMono(response -> {
+                    HttpStatus httpStatus = response.statusCode();
+
+                    if(httpStatus.is4xxClientError()){
+                        throw new NoSuchElementFoundException("no such element");
+                    }
+                    return response.bodyToMono(TMDBProvidersResponse.class);
+                });
     }
 
     public Mono<TMDBMovieDetailsResponse> getDetails(String id) {
@@ -62,8 +67,14 @@ public class TMDBClient {
         return webClient.get()
                 .uri(uri)
                 .headers(this::getHeaders)
-                .retrieve()
-                .bodyToMono(TMDBMovieDetailsResponse.class);
+                .exchangeToMono(response -> {
+                    HttpStatus httpStatus = response.statusCode();
+
+                    if(httpStatus.is4xxClientError()){
+                        throw new NoSuchElementFoundException("no such element");
+                    }
+                    return response.bodyToMono(TMDBMovieDetailsResponse.class);
+                });
     }
 
     public Mono<TMDBMovieVideosResponse> getVideos(String id) {
@@ -74,8 +85,14 @@ public class TMDBClient {
         return webClient.get()
                 .uri(uri)
                 .headers(this::getHeaders)
-                .retrieve()
-                .bodyToMono(TMDBMovieVideosResponse.class);
+                .exchangeToMono(response -> {
+                    HttpStatus httpStatus = response.statusCode();
+
+                    if(httpStatus.is4xxClientError()){
+                        throw new NoSuchElementFoundException("no such element");
+                    }
+                    return response.bodyToMono(TMDBMovieVideosResponse.class);
+                });
     }
 
     private HttpHeaders getHttpHeaders() {

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @Data
 public class Emotion {
-    private int videoId;
+    private String videoId;
     private EmotionConstant type;
     private LocalDateTime createdAt;
 }

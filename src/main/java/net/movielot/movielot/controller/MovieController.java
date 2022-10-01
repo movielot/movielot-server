@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.movielot.movielot.domain.Emotion;
 import net.movielot.movielot.enums.EmotionConstant;
+import net.movielot.movielot.exceptions.NoSuchElementFoundException;
 import net.movielot.movielot.response.MovieDetailsResponse;
 import net.movielot.movielot.response.SuccessResponse;
 import net.movielot.movielot.response.tmdb.TMDBMovieListResponse;
@@ -11,6 +12,7 @@ import net.movielot.movielot.service.EmotionService;
 import net.movielot.movielot.service.MovieService;
 import net.movielot.movielot.util.ApiResponseUtil;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -43,7 +45,7 @@ public class MovieController {
 
     @PostMapping("/{id}/emotions")
     public void expressEmotion(
-            @PathVariable int id,
+            @PathVariable String id,
             @RequestParam EmotionConstant emotion
     ) {
         emotionService.expressEmotion(id, emotion);
@@ -52,7 +54,7 @@ public class MovieController {
 
     @GetMapping("/{id}/emotions")
     public List<Emotion> expressEmotion(
-            @PathVariable int id
+            @PathVariable String id
     ) {
         return emotionService.getEmotionsFor(id);
     }

@@ -2,6 +2,7 @@ package net.movielot.movielot.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.movielot.movielot.configuration.TMDBClient;
 import net.movielot.movielot.domain.Emotion;
 import net.movielot.movielot.enums.EmotionConstant;
 import net.movielot.movielot.infrastructure.EmotionRepository;
@@ -14,8 +15,10 @@ import java.util.List;
 @Slf4j
 public class EmotionService {
     private final EmotionRepository emotionRepository;
+    private final TMDBClient tmdbClient;
 
-    public void expressEmotion(int videoId, EmotionConstant emotion) {
+    public void expressEmotion(String videoId, EmotionConstant emotion) {
+        tmdbClient.getVideos(videoId).block();
         Emotion emotionEntity = Emotion.builder()
                 .videoId(videoId)
                 .type(emotion)
@@ -25,7 +28,8 @@ public class EmotionService {
         emotionRepository.save(emotionEntity).subscribe();
     }
 
-    public List<Emotion> getEmotionsFor(int videoId) {
+    public List<Emotion> getEmotionsFor(String videoId) {
+        tmdbClient.getVideos(videoId).block();
         return emotionRepository.findByVideoId(videoId).collectList().block();
     }
 }

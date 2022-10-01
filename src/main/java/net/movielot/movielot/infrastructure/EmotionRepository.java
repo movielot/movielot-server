@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
 @Repository
-public interface EmotionRepository extends ReactiveCrudRepository<Emotion, Integer> {
+public interface EmotionRepository extends ReactiveCrudRepository<Emotion, String> {
 
-    Flux<Emotion> findByVideoId(int id);
+    Flux<Emotion> findByVideoId(String id);
 }
