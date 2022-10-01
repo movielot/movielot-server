@@ -52,7 +52,7 @@ public class TMDBClient {
                 .exchangeToMono(response -> {
                     HttpStatus httpStatus = response.statusCode();
 
-                    if(httpStatus.is4xxClientError()){
+                    if(httpStatus == HttpStatus.NOT_FOUND){
                         throw new NoSuchElementFoundException("no such element");
                     }
                     return response.bodyToMono(TMDBProvidersResponse.class);
@@ -70,7 +70,7 @@ public class TMDBClient {
                 .exchangeToMono(response -> {
                     HttpStatus httpStatus = response.statusCode();
 
-                    if(httpStatus.is4xxClientError()){
+                    if(httpStatus == HttpStatus.NOT_FOUND){
                         throw new NoSuchElementFoundException("no such element");
                     }
                     return response.bodyToMono(TMDBMovieDetailsResponse.class);
@@ -88,7 +88,7 @@ public class TMDBClient {
                 .exchangeToMono(response -> {
                     HttpStatus httpStatus = response.statusCode();
 
-                    if(httpStatus.is4xxClientError()){
+                    if(httpStatus == HttpStatus.NOT_FOUND){
                         throw new NoSuchElementFoundException("no such element");
                     }
                     return response.bodyToMono(TMDBMovieVideosResponse.class);
