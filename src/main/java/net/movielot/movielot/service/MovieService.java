@@ -32,9 +32,7 @@ public class MovieService {
         Mono<TMDBProvidersResponse> providers = tmdbClient.getProviders(id);
         Mono<TMDBMovieVideosResponse> videos = tmdbClient.getVideos(id);
 
-        details.subscribe(response -> {
-            BeanUtils.copyProperties(response, result);
-        });
+        details.subscribe(response -> BeanUtils.copyProperties(response, result));
 
         providers.subscribe(response -> {
             MovieDetailsResponse.TMDBProvider tmdbProvider = new MovieDetailsResponse.TMDBProvider();
